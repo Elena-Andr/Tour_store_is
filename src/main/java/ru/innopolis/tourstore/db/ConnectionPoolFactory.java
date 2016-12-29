@@ -28,12 +28,13 @@ public class ConnectionPoolFactory {
     /**
      * Method returns connection from connection pool
      */
-    public static Connection getConnection(){
+    public static Connection getConnection() throws SQLException {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
+            throw new SQLException("Unable to get connection: " + e.getMessage());
         }
         return connection;
     }
