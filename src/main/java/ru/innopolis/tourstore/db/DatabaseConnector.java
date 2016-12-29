@@ -7,7 +7,7 @@ import java.sql.*;
 /**
  * Object manages db connections and provides statements
  */
-public class DatabaseConnector {
+public class DatabaseConnector implements IDatabaseConnector {
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
 
     private Connection connection;
@@ -26,7 +26,7 @@ public class DatabaseConnector {
     }
 
     /**
-     * Method return statement
+     * Method returns statement
      */
     public Statement getStatement(){
         return statement;

@@ -7,7 +7,7 @@
 <body>
 <p>Статистика покупок</p>
 <c:forEach items="${orders}" var="order" varStatus="status">
-    <p>${order.toString()}</p>
+    <p>${order}</p>
 </c:forEach>
 <p><a href="/store">На главную</a></p>
 </body>

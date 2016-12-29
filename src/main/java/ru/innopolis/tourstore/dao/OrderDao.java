@@ -3,8 +3,13 @@ package ru.innopolis.tourstore.dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.innopolis.tourstore.db.DatabaseConnector;
+import ru.innopolis.tourstore.db.IDatabaseConnector;
 import ru.innopolis.tourstore.entity.Order;
+import ru.innopolis.tourstore.entity.Tour;
+import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.exception.OrderDaoException;
+import ru.innopolis.tourstore.exception.TourDaoException;
+import ru.innopolis.tourstore.exception.UserDaoException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,14 +24,14 @@ import static ru.innopolis.tourstore.db.SQLConstants.*;
  */
 public class OrderDao extends AbstractDao<Order> {
     private static final Logger LOG = LoggerFactory.getLogger(OrderDao.class);
-    private DatabaseConnector databaseConnector;
+    private IDatabaseConnector databaseConnector;
 
-    public OrderDao(){
-        databaseConnector = new DatabaseConnector();
+    public OrderDao(IDatabaseConnector databaseConnector){
+        this.databaseConnector = databaseConnector;
     }
 
     /**
-     * Methods retrieves all orders from the Orders table
+     * Method retrieves all orders from the Orders table
      * @throws OrderDaoException in case of SQL exception
      */
     public List<Order> getAll() throws OrderDaoException {
@@ -51,7 +56,7 @@ public class OrderDao extends AbstractDao<Order> {
     }
 
     /**
-     * Methods returns Order object by ID from the Orders table
+     * Method returns Order object by ID from the Orders table
      * @throws OrderDaoException in case of SQL exception
      */
     public Order getEntityById(int id) throws OrderDaoException {
@@ -78,7 +83,7 @@ public class OrderDao extends AbstractDao<Order> {
     }
 
     /**
-     * Methods update the existing record
+     * Method updates the existing record
      * @throws OrderDaoException in case of SQL exception
      */
     public void update(Order entity) throws OrderDaoException {
@@ -138,5 +143,34 @@ public class OrderDao extends AbstractDao<Order> {
                 databaseConnector.closePreparedStatement(preparedStatement);
             }
         }
+    }
+
+    //TODO: this method should be in Service class
+    public String getOrderInfo(Order order) {
+        User user = null;
+        Tour tour = null;
+        try {
+            UserDao userDao = new UserDao(databaseConnector);
+            user = userDao.getEntityById(order.getUserId());
+
+            TourDao tourDao = new TourDao(databaseConnector);
+            tour = tourDao.getEntityById(order.getTourId());
+        } catch (UserDaoException e) {
+            LOG.error(e.getMessage(), e);
+        } catch (TourDaoException e) {
+            LOG.error(e.getMessage(), e);
+        }
+
+        return "User \"" + user.getName() + "\"" + " " + " ---- " + tour.getName();
+    }
+
+    //TODO: this method should be in Service class
+    public List<String> getOrderInfos(List<Order> orders){
+        List<String> orderInfos = new ArrayList<>();
+        OrderDao orderDao = new OrderDao(databaseConnector);
+        for(Order order : orders){
+            orderInfos.add(orderDao.getOrderInfo(order));
+        }
+        return orderInfos;
     }
 }

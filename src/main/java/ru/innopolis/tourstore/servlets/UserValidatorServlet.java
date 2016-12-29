@@ -1,5 +1,6 @@
 package ru.innopolis.tourstore.servlets;
 
+import ru.innopolis.tourstore.db.DatabaseConnector;
 import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.dao.UserDao;
 import ru.innopolis.tourstore.exception.UserDaoException;
@@ -52,16 +53,16 @@ public class UserValidatorServlet extends HttpServlet {
         }
     }
 
-
     private User validateLogin(String name, String password) throws UserDaoException {
 
         if (name == null || password == null) {
             return null;
         }
 
-        byte[] hashedPassword =PasswordAuthentication.hashPassword(password, "");
+        byte[] hashedPassword = PasswordAuthentication.hashPassword(password, new byte[]{});
 
-        UserDao userDao = new UserDao();
+        DatabaseConnector dbConnector = new DatabaseConnector();
+        UserDao userDao = new UserDao(dbConnector);
         List<User> users = userDao.getAll();
 
         for (User user : users) {

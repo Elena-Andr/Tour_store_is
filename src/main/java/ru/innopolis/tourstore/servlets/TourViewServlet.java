@@ -1,5 +1,6 @@
 package ru.innopolis.tourstore.servlets;
 
+import ru.innopolis.tourstore.db.DatabaseConnector;
 import ru.innopolis.tourstore.entity.Tour;
 import ru.innopolis.tourstore.dao.TourDao;
 import javax.servlet.ServletException;
@@ -19,7 +20,8 @@ public class TourViewServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             //Show only not deleted tours
-            TourDao tourDao = new TourDao();
+            DatabaseConnector dbConnector = new DatabaseConnector();
+            TourDao tourDao = new TourDao(dbConnector);
             List<Tour> availableTours = tourDao.getAll();
             Predicate<Tour> tourPredicate = (Tour o) -> o.isDeleted();
             availableTours.removeIf(tourPredicate);

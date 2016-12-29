@@ -3,6 +3,7 @@ package ru.innopolis.tourstore.dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.innopolis.tourstore.db.DatabaseConnector;
+import ru.innopolis.tourstore.db.IDatabaseConnector;
 import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.exception.UserDaoException;
 import java.sql.PreparedStatement;
@@ -18,15 +19,15 @@ import static ru.innopolis.tourstore.db.SQLConstants.*;
  */
 public class UserDao extends AbstractDao<User>{
     private static final Logger LOG = LoggerFactory.getLogger(UserDao.class);
-    private DatabaseConnector databaseConnector;
+    private IDatabaseConnector databaseConnector;
 
-    public UserDao(){
-        databaseConnector = new DatabaseConnector();
+    public UserDao(IDatabaseConnector databaseConnector){
+        this.databaseConnector = databaseConnector;
     }
 
 
     /**
-     * Methods retrieves all orders from the Users table
+     * Method retrieves all orders from the Users table
      * @throws UserDaoException in case of SQL exception
      */
     public List<User> getAll() throws UserDaoException {
@@ -52,7 +53,7 @@ public class UserDao extends AbstractDao<User>{
     }
 
     /**
-     * Methods returns User object by ID from the Users table
+     * Method returns User object by ID from the Users table
      * @throws UserDaoException in case of SQL exception
      */
     public User getEntityById(int id) throws UserDaoException {
@@ -82,7 +83,7 @@ public class UserDao extends AbstractDao<User>{
     }
 
     /**
-     * Methods update the existing record
+     * Method updates the existing record
      * @throws UserDaoException in case of SQL exception
      */
     public void update(User entity) throws UserDaoException {

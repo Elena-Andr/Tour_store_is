@@ -1,5 +1,7 @@
 package ru.innopolis.tourstore.servlets;
 
+import ru.innopolis.tourstore.db.DatabaseConnector;
+import ru.innopolis.tourstore.db.IDatabaseConnector;
 import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.dao.UserDao;
 import ru.innopolis.tourstore.exception.UserDaoException;
@@ -16,6 +18,9 @@ import java.util.List;
  * Servlet for registering new users
  */
 public class RegistrationServlet extends HttpServlet {
+
+    private IDatabaseConnector dbConnector = new DatabaseConnector();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("register.jsp");
@@ -48,13 +53,15 @@ public class RegistrationServlet extends HttpServlet {
         User user = new User();
         user.setName(userName);
 
-        byte[] hashedPassword = PasswordAuthentication.hashPassword(password, "");
+        byte[] hashedPassword = PasswordAuthentication.hashPassword(password, new byte[]{});
         user.setPassword(hashedPassword);
 
         user.setRole("user");
 
-        UserDao userDao = new UserDao();
+        UserDao userDao = new UserDao(dbConnector);
         userDao.create(user);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("registerSuccess.jsp");
+        dispatcher.forward(req, resp);
 
         } catch (UserDaoException e){
             req.setAttribute("ERROR", e.getMessage());
@@ -62,14 +69,11 @@ public class RegistrationServlet extends HttpServlet {
             dispatcher.forward(req, resp);
             return;
         }
-
-        RequestDispatcher dispatcher = req.getRequestDispatcher("registerSuccess.jsp");
-        dispatcher.forward(req, resp);
     }
 
     private boolean isUserAlreadyRegistered(String name) throws UserDaoException {
 
-        UserDao userDao = new UserDao();
+        UserDao userDao = new UserDao(dbConnector);
         List<User> userList = userDao.getAll();
 
         for(User user : userList){

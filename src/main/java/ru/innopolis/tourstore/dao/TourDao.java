@@ -3,6 +3,7 @@ package ru.innopolis.tourstore.dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.innopolis.tourstore.db.DatabaseConnector;
+import ru.innopolis.tourstore.db.IDatabaseConnector;
 import ru.innopolis.tourstore.entity.Tour;
 import ru.innopolis.tourstore.exception.OrderDaoException;
 import ru.innopolis.tourstore.exception.TourDaoException;
@@ -20,10 +21,10 @@ import static ru.innopolis.tourstore.db.SQLConstants.*;
  */
 public class TourDao extends AbstractDao<Tour> {
     private static final Logger LOG = LoggerFactory.getLogger(TourDao.class);
-    private DatabaseConnector databaseConnector;
+    private IDatabaseConnector databaseConnector;
 
-    public TourDao(){
-        databaseConnector = new DatabaseConnector();
+    public TourDao(IDatabaseConnector databaseConnector){
+        this.databaseConnector = databaseConnector;
     }
 
     /**

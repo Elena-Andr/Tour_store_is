@@ -1,6 +1,7 @@
 package ru.innopolis.tourstore.servlets;
 
 
+import ru.innopolis.tourstore.db.DatabaseConnector;
 import ru.innopolis.tourstore.entity.Tour;
 import ru.innopolis.tourstore.dao.TourDao;
 import ru.innopolis.tourstore.exception.TourDaoException;
@@ -30,7 +31,8 @@ public class TourCreateServlet extends HttpServlet {
             tour.setDescription(req.getParameter("description"));
             tour.setDeleted(false);
 
-            TourDao tourDao = new TourDao();
+            DatabaseConnector dbConnector = new DatabaseConnector();
+            TourDao tourDao = new TourDao(dbConnector);
             tourDao.create(tour);
 
             resp.sendRedirect(String.format("%s%s", req.getContextPath(), "/store"));

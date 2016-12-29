@@ -7,7 +7,7 @@
 <body>
 <h1>Мои покупки</h1>
 <c:forEach items="${myOrders}" var="order" varStatus="status">
-<br>${order.toString()}
+<br>${order}
 </c:forEach>
 <p><a href="/store">На главную</a></p>
 </body>

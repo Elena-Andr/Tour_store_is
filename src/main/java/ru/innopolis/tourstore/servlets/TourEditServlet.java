@@ -1,5 +1,7 @@
 package ru.innopolis.tourstore.servlets;
 
+import ru.innopolis.tourstore.db.DatabaseConnector;
+import ru.innopolis.tourstore.db.IDatabaseConnector;
 import ru.innopolis.tourstore.entity.Tour;
 import ru.innopolis.tourstore.dao.TourDao;
 import ru.innopolis.tourstore.exception.TourDaoException;
@@ -12,11 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class TourEditServlet extends HttpServlet {
+    IDatabaseConnector dbConnector = new DatabaseConnector();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             int id = Integer.valueOf(req.getParameter("id"));
-            TourDao tourDao = new TourDao();
+
+            TourDao tourDao = new TourDao(dbConnector);
             Tour tour = tourDao.getEntityById(id);
 
             req.setAttribute("id", id);
@@ -39,7 +44,7 @@ public class TourEditServlet extends HttpServlet {
            tour.setName(req.getParameter("name"));
            tour.setDescription(req.getParameter("description"));
 
-           TourDao tourDao = new TourDao();
+           TourDao tourDao = new TourDao(dbConnector);
            tourDao.update(tour);
 
            resp.sendRedirect(String.format("%s%s", req.getContextPath(), "/store"));

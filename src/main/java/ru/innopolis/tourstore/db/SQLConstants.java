@@ -5,6 +5,7 @@ package ru.innopolis.tourstore.db;
  */
 public class SQLConstants {
     public static final String DATABASE_URL_H2 = "jdbc:h2:~/tourstore";
+    public static final java.lang.String DATABASE_URL_H2_TEST = "jdbc:h2:~/tourstoretest";
 
     public static final String DROP_ALL_QUERY = "DROP ALL OBJECTS;";
 
@@ -31,4 +32,5 @@ public class SQLConstants {
     public static final String UPDATE_TOUR_QUERY = "UPDATE TOURS SET NAME=?, DESCRIPTION=?, DELETED=? WHERE ID=?";
     public static final String UPDATE_USER_QUERY = "UPDATE USERS SET NAME=?, PASSWORD=?, ROLE=? WHERE ID=?";
     public static final String UPDATE_ORDER_QUERY = "UPDATE ORDERS SET USER_ID=?, TOUR_ID=? WHERE ID=?";
+
 }

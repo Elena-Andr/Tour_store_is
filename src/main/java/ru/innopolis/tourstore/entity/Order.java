@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.innopolis.tourstore.dao.TourDao;
 import ru.innopolis.tourstore.dao.UserDao;
+import ru.innopolis.tourstore.db.DatabaseConnector;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.exception.UserDaoException;
 
@@ -39,24 +40,5 @@ public class Order {
 
     public void setTourId(int tourId) {
         this.tourId = tourId;
-    }
-
-    @Override
-    public String toString() {
-        User user = null;
-        Tour tour = null;
-        try {
-            UserDao userDao = new UserDao();
-            user = userDao.getEntityById(userId);
-
-            TourDao tourDao = new TourDao();
-            tour = tourDao.getEntityById(tourId);
-        } catch (UserDaoException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (TourDaoException e) {
-            LOG.error(e.getMessage(), e);
-        }
-
-        return "User \"" + user.getName() + "\"" + " " + " ---- " + tour.getName();
     }
 }
