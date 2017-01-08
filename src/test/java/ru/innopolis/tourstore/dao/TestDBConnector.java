@@ -4,13 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.innopolis.tourstore.db.IDatabaseConnector;
 import ru.innopolis.tourstore.db.SQLConstants;
-import ru.innopolis.tourstore.entity.Order;
-import ru.innopolis.tourstore.entity.Tour;
-import ru.innopolis.tourstore.entity.User;
-import ru.innopolis.tourstore.exception.OrderDaoException;
-import ru.innopolis.tourstore.exception.TourDaoException;
-import ru.innopolis.tourstore.exception.UserDaoException;
-import ru.innopolis.tourstore.servlets.PasswordAuthentication;
 
 import java.sql.*;
 

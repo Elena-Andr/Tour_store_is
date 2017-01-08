@@ -1,12 +1,11 @@
-package ru.innopolis.tourstore.dao;
+package ru.innopolis.tourstore.service;
 
 import ru.innopolis.tourstore.entity.Tour;
 import ru.innopolis.tourstore.exception.TourDaoException;
 
 import java.util.List;
 
-public interface TourDao {
-
+public interface TourService {
     List<Tour> getAll() throws TourDaoException;
     Tour getEntityById(int id) throws TourDaoException;
     void update(Tour entity) throws TourDaoException;

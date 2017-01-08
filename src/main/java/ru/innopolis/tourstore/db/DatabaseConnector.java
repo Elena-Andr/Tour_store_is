@@ -2,11 +2,14 @@ package ru.innopolis.tourstore.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import java.sql.*;
 
 /**
  * Object manages db connections and provides statements
  */
+@Component
 public class DatabaseConnector implements IDatabaseConnector {
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
 

@@ -7,5 +7,6 @@
 <div>Произошла ошибка</div>
 <img src="oops.jpg"/>
 <p>${ERROR}</p>
+<p><a href="store">На главную</a></p>
 </body>
 </html>

@@ -2,11 +2,6 @@ package ru.innopolis.tourstore.entity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.innopolis.tourstore.dao.TourDao;
-import ru.innopolis.tourstore.dao.UserDao;
-import ru.innopolis.tourstore.db.DatabaseConnector;
-import ru.innopolis.tourstore.exception.TourDaoException;
-import ru.innopolis.tourstore.exception.UserDaoException;
 
 /**
  * Object represents entity "Order"

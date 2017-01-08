@@ -1,4 +1,4 @@
-package ru.innopolis.tourstore.servlets;
+package ru.innopolis.tourstore.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

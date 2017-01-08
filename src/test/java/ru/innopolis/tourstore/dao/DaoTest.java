@@ -16,7 +16,10 @@ import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.exception.OrderDaoException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.exception.UserDaoException;
-import ru.innopolis.tourstore.servlets.PasswordAuthentication;
+import ru.innopolis.tourstore.service.OrderService;
+import ru.innopolis.tourstore.service.TourService;
+import ru.innopolis.tourstore.service.UserService;
+import ru.innopolis.tourstore.filter.PasswordAuthentication;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +27,9 @@ import static org.junit.Assert.assertEquals;
 public class DaoTest {
     private static final Logger LOG = LoggerFactory.getLogger(DaoTest.class);
     private IDatabaseConnector dbConnector;
+    private OrderService orderService;
+    private TourService tourService;
+    private UserService userService;
 
     @Before
     public void setUp(){
@@ -55,45 +61,45 @@ public class DaoTest {
     @Test
     public void successTest(){
         try {
-            OrderDao orderDao = new OrderDao(dbConnector);
-            List<Order> orderList = orderDao.getAll();
+            List<Order> orderList = orderService.getAll();
 
-            String result = orderDao.getOrderInfo(orderList.get(0));
+            String result = orderService.getOrderInfo(orderList.get(0));
             String expected = "User \"Maria\"  ---- Italy";
 
             assertEquals(expected, result);
         } catch (OrderDaoException e) {
+            LOG.error(e.getMessage(), e);
+        } catch (UserDaoException e) {
+            LOG.error(e.getMessage(), e);
+        } catch (TourDaoException e) {
             LOG.error(e.getMessage(), e);
         }
     }
 
     @Test(expected = Exception.class)
     public void failedTest() throws Exception {
-            OrderDao orderDao = new OrderDao(null);
-            orderDao.delete(666);
+            OrderDaoImpl orderDaoImpl = new OrderDaoImpl();
+            orderDaoImpl.delete(666);
     }
 
     private void fillToursTable() throws TourDaoException {
 
-        TourDao tourDao = new TourDao(dbConnector);
         Tour tour = new Tour();
         tour.setName("Italy");
         tour.setDescription("Sample Italy tour description");
-
-        tourDao.create(tour);
+        tourService.create(tour);
 
         tour.setName("Germany");
         tour.setDescription("Sample Germany tour description");
-        tourDao.create(tour);
+        tourService.create(tour);
 
         tour.setName("France");
         tour.setDescription("Sample France tour description");
-        tourDao.create(tour);
+        tourService.create(tour);
     }
 
     private void fillUsersTable() throws UserDaoException {
 
-        UserDao userDao = new UserDao(dbConnector);
         User user = new User();
         user.setName("Maria");
         user.setRole("user");
@@ -102,21 +108,20 @@ public class DaoTest {
         byte[] hashedPassword = PasswordAuthentication.hashPassword(password, new byte[]{});
         user.setPassword(hashedPassword);
 
-        userDao.create(user);
+        userService.create(user);
 
         user.setName("admin");
         user.setRole("admin");
         user.setPassword(hashedPassword);
-        userDao.create(user);
+        userService.create(user);
     }
 
     private void fillOrdersTable() throws OrderDaoException {
 
-        OrderDao orderDao = new OrderDao(dbConnector);
         Order order = new Order();
         order.setUserId(1);
         order.setTourId(1);
 
-        orderDao.create(order);
+        orderService.create(order);
     }
 }
