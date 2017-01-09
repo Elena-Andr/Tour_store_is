@@ -37,84 +37,12 @@
     </context-param>
 
     <servlet>
-        <servlet-name>TourStore</servlet-name>
+        <servlet-name>Main</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>TourStore</servlet-name>
-        <url-pattern>/store</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>TourCreate</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>TourCreate</servlet-name>
-        <url-pattern>/store/create</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>TourDelete</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>TourDelete</servlet-name>
-        <url-pattern>/store/delete</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>TourEdit</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>TourEdit</servlet-name>
-        <url-pattern>/store/edit</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>TourOrder</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>TourOrder</servlet-name>
-        <url-pattern>/store/order</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>Statistics</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Statistics</servlet-name>
-        <url-pattern>/stat</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>Registration</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Registration</servlet-name>
-        <url-pattern>/register</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Login</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>Logout</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Logout</servlet-name>
-        <url-pattern>/logout</url-pattern>
+        <servlet-name>Main</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
 </web-app>
