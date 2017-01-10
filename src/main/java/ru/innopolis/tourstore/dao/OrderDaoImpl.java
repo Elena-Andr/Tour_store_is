@@ -22,8 +22,12 @@ import static ru.innopolis.tourstore.db.SQLConstants.*;
 public class OrderDaoImpl implements OrderDao {
     private static final Logger LOG = LoggerFactory.getLogger(OrderDaoImpl.class);
 
-    @Autowired
     private IDatabaseConnector databaseConnector;
+
+    @Autowired
+    public OrderDaoImpl(IDatabaseConnector databaseConnector){
+        this.databaseConnector = databaseConnector;
+    }
 
     /**
      * Method retrieves all orders from the Orders table

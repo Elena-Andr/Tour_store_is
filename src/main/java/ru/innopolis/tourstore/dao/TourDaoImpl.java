@@ -23,8 +23,12 @@ import static ru.innopolis.tourstore.db.SQLConstants.*;
 public class TourDaoImpl implements TourDao {
     private static final Logger LOG = LoggerFactory.getLogger(TourDaoImpl.class);
 
-    @Autowired
     private IDatabaseConnector databaseConnector;
+
+    @Autowired
+    public TourDaoImpl(IDatabaseConnector databaseConnector){
+        this.databaseConnector = databaseConnector;
+    }
 
     /**
      * Methods retrieves all orders from the Tours table

@@ -1,11 +1,28 @@
 package ru.innopolis.tourstore.controller;
 
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
 public abstract class AbstractController {
 
-    public String handleError(Model model, String errorMessage){
-        model.addAttribute("ERROR", errorMessage);
-        return "exceptionPage";
+//    @ExceptionHandler({OrderDaoException.class, UserDaoException.class, TourDaoException.class})
+//    public ModelAndView handleDaoErrors(Exception ex){
+//        ModelAndView modelAndView = new ModelAndView("exceptionPage");
+//        modelAndView.addObject("exception", ex.getMessage());
+//        return modelAndView;
+//    }
+//
+//    @ExceptionHandler(InvalidInputDataException.class)
+//    public ModelAndView handleInputError(InvalidInputDataException ex){
+//        ModelAndView modelAndView = new ModelAndView("exceptionPage");
+//        modelAndView.addObject("exception", ex.getMessage());
+//        return modelAndView;
+//    }
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleMainError(Exception ex){
+        ModelAndView modelAndView = new ModelAndView("exceptionPage");
+        modelAndView.addObject("exception", ex.getMessage());
+        return modelAndView;
     }
 }

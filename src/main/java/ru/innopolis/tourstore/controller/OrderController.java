@@ -11,6 +11,7 @@ import ru.innopolis.tourstore.exception.OrderDaoException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.exception.UserDaoException;
 import ru.innopolis.tourstore.service.OrderService;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.function.Predicate;
@@ -18,50 +19,40 @@ import java.util.function.Predicate;
 @Controller
 public class OrderController extends AbstractController{
 
-    @Autowired
     private OrderService orderService;
 
+    @Autowired
+    public OrderController(OrderService orderService){
+        this.orderService = orderService;
+    }
+
     @RequestMapping("/store/order")
-    public String getUserOrders(Model model, HttpSession session, @RequestParam("id") int tourId){
-        try {
-            //Add the tour to the user's orders
-            User user = (User) session.getAttribute("user");
+    public String getUserOrders(Model model,
+                                HttpSession session,
+                                @RequestParam("id") int tourId) throws UserDaoException, OrderDaoException, TourDaoException {
 
-            Order order = new Order();
-            order.setTourId(tourId);
-            order.setUserId(user.getId());
+        User user = (User)session.getAttribute("user");
 
-            orderService.create(order);
+        //Add the tour to the user's orders
+        Order order = new Order();
+        order.setTourId(tourId);
+        order.setUserId(user.getId());
+        orderService.create(order);
 
-            //Show all orders of the user
-            List<Order> orders = orderService.getAll();
-            Predicate<Order> orderPredicate = (Order o) -> o.getUserId() != user.getId();
-            orders.removeIf(orderPredicate);
-            model.addAttribute("myOrders", orderService.getOrderInfos(orders));
+        //Show all orders of the user
+        List<Order> orders = orderService.getAll();
+        Predicate<Order> orderPredicate = (Order o) -> o.getUserId() != user.getId();
+        orders.removeIf(orderPredicate);
+        model.addAttribute("myOrders", orderService.getOrderInfos(orders));
 
-            return "ShoppingCartView";
-        } catch (OrderDaoException e) {
-            return handleError(model, e.getMessage());
-        } catch (UserDaoException e) {
-            return handleError(model, e.getMessage());
-        } catch (TourDaoException e) {
-            return handleError(model, e.getMessage());
-        }
+        return "ShoppingCartView";
     }
 
     @RequestMapping("/stat")
-    public String getAllOrders(Model model){
-        try {
+    public String getAllOrders(Model model) throws UserDaoException, OrderDaoException, TourDaoException {
             List<Order> orders = orderService.getAll();
             List<String> orderInfos = orderService.getOrderInfos(orders);
             model.addAttribute("orders", orderInfos);
             return "OrdersView";
-        } catch (OrderDaoException e) {
-            return handleError(model, e.getMessage());
-        } catch (UserDaoException e) {
-            return handleError(model, e.getMessage());
-        } catch (TourDaoException e) {
-            return handleError(model, e.getMessage());
-        }
     }
 }

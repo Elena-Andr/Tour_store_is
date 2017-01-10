@@ -4,20 +4,26 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <filter>
-        <filter-name>UserCheckFilter</filter-name>
-        <filter-class>ru.innopolis.tourstore.filter.UserCheckFilter</filter-class>
-        <init-param>
-            <param-name>loginActionURI</param-name>
-            <param-value>/Servlet/userValidator</param-value>
-        </init-param>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>ru.innopolis.tourstore.filter.AdminFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>UserCheckFilter</filter-name>
+        <filter-name>AdminFilter</filter-name>
         <url-pattern>/store/delete</url-pattern>
         <url-pattern>/store/edit</url-pattern>
         <url-pattern>/store/create</url-pattern>
         <url-pattern>/stat</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>UserFilter</filter-name>
+        <filter-class>ru.innopolis.tourstore.filter.CommonUserFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UserFilter</filter-name>
+        <url-pattern>/store/order</url-pattern>
+    </filter-mapping>
+
 
     <resource-ref>
         <res-ref-name>jdbc/tourstore</res-ref-name>
@@ -44,5 +50,9 @@
         <servlet-name>Main</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
 
 </web-app>

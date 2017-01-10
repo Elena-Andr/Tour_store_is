@@ -24,6 +24,5 @@
         </tr>
     </table>
 </form>
-<p>${ERROR}</p>
 </body>
 </html>

@@ -1,10 +1,8 @@
 package ru.innopolis.tourstore.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.innopolis.tourstore.dao.TourDao;
-import ru.innopolis.tourstore.dao.TourDaoImpl;
 import ru.innopolis.tourstore.entity.Tour;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import org.springframework.stereotype.Service;
@@ -13,10 +11,13 @@ import java.util.List;
 
 @Service
 public class TourServiceImpl implements TourService {
-    private static final Logger LOG = LoggerFactory.getLogger(TourServiceImpl.class);
+
+    private TourDao tourDao;
 
     @Autowired
-    private TourDao tourDao;
+    public TourServiceImpl(TourDao tourDao){
+        this.tourDao = tourDao;
+    }
 
     @Override
     public List<Tour> getAll() throws TourDaoException{

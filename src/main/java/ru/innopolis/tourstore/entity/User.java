@@ -1,20 +1,15 @@
 package ru.innopolis.tourstore.entity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Object represents entity "User"
  */
 public class User {
-    private static final Logger LOG = LoggerFactory.getLogger(User.class);
 
     private int id;
     private String name;
-    private byte[] password;
+    private String password;
+    private String salt;
     private String role;
-
-    public User(){}
 
     public int getId() {
         return id;
@@ -22,6 +17,14 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getName() {
@@ -32,11 +35,11 @@ public class User {
         this.name = name;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

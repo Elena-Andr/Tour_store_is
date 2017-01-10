@@ -78,7 +78,7 @@ public class DaoTest {
 
     @Test(expected = Exception.class)
     public void failedTest() throws Exception {
-            OrderDaoImpl orderDaoImpl = new OrderDaoImpl();
+            OrderDaoImpl orderDaoImpl = new OrderDaoImpl(dbConnector);
             orderDaoImpl.delete(666);
     }
 
@@ -103,9 +103,10 @@ public class DaoTest {
         User user = new User();
         user.setName("Maria");
         user.setRole("user");
+        user.setSalt(PasswordAuthentication.generateSalt());
 
         String password = "123";
-        byte[] hashedPassword = PasswordAuthentication.hashPassword(password, new byte[]{});
+        String hashedPassword = PasswordAuthentication.hashPassword(password,user.getSalt());
         user.setPassword(hashedPassword);
 
         userService.create(user);

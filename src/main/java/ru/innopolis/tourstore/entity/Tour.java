@@ -1,13 +1,9 @@
 package ru.innopolis.tourstore.entity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Object represents entity "Tour"
  */
 public class Tour {
-    private static final Logger LOG = LoggerFactory.getLogger(Tour.class);
 
     private int id;
     private String name;

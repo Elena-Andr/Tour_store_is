@@ -13,8 +13,12 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserDao userDao;
+
+    @Autowired
+    public UserServiceImpl(UserDao userDao){
+        this.userDao = userDao;
+    }
 
     @Override
     public List<User> getAll() throws UserDaoException{
@@ -38,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User entity) throws UserDaoException{
+        entity.setSalt(PasswordAuthentication.generateSalt());
+        String hashedPassword = PasswordAuthentication.hashPassword(entity.getPassword().trim(), entity.getSalt());
+        entity.setPassword(hashedPassword);
         userDao.create(entity);
     }
 
@@ -54,13 +61,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User validateLogin(String userName, String password) throws UserDaoException {
-        byte[] hashedPassword = PasswordAuthentication.hashPassword(password, new byte[]{});
-
-        List<User> users = getAll();
+    public User validateLogin(User entity) throws UserDaoException {
+        List<User> users = userDao.getAll();
 
         for (User user : users) {
-            if (user.getName().equals(userName) && Arrays.equals(hashedPassword, user.getPassword())) {
+            String hashedPassword = PasswordAuthentication.hashPassword(entity.getPassword(), user.getSalt());
+            if (user.getName().equals(entity.getName()) && hashedPassword.equals(user.getPassword())) {
                 return user;
             }
         }

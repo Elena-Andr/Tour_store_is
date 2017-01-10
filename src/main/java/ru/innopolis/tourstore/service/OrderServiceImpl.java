@@ -1,11 +1,8 @@
 package ru.innopolis.tourstore.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.innopolis.tourstore.dao.OrderDao;
-import ru.innopolis.tourstore.dao.OrderDaoImpl;
 import ru.innopolis.tourstore.entity.Order;
 import ru.innopolis.tourstore.entity.Tour;
 import ru.innopolis.tourstore.entity.User;
@@ -17,16 +14,25 @@ import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
 
-    @Autowired
     private OrderDao orderDao;
-
-    @Autowired
     private UserService userService;
+    private TourService tourService;
 
     @Autowired
-    private TourService tourService;
+    public OrderServiceImpl(OrderDao orderDao){
+        this.orderDao = orderDao;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setTourService(TourService tourService) {
+        this.tourService = tourService;
+    }
 
     @Override
     public List<Order> getAll() throws OrderDaoException{
@@ -55,18 +61,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String getOrderInfo(Order order) throws UserDaoException, TourDaoException {
-        User user = null;
-        Tour tour = null;
-        try {
-            user = userService.getEntityById(order.getUserId());
-            tour = tourService.getEntityById(order.getTourId());
-        } catch (UserDaoException e) {
-            LOG.error(e.getMessage(), e);
-            throw new UserDaoException(e.getMessage());
-        } catch (TourDaoException e) {
-            LOG.error(e.getMessage(), e);
-            throw new TourDaoException(e.getMessage());
-        }
+        User user = userService.getEntityById(order.getUserId());
+        Tour tour = tourService.getEntityById(order.getTourId());
         return "User \"" + user.getName() + "\"" + " " + " ---- " + tour.getName();
     }
 

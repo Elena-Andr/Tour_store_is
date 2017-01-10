@@ -22,8 +22,12 @@ import static ru.innopolis.tourstore.db.SQLConstants.*;
 public class UserDaoImpl implements UserDao{
     private static final Logger LOG = LoggerFactory.getLogger(UserDaoImpl.class);
 
-    @Autowired
     private IDatabaseConnector databaseConnector;
+
+    @Autowired
+    public UserDaoImpl(IDatabaseConnector databaseConnector){
+        this.databaseConnector = databaseConnector;
+    }
 
     /**
      * Method retrieves all orders from the Users table
@@ -40,7 +44,8 @@ public class UserDaoImpl implements UserDao{
 
                 user.setId(resultSet.getInt("ID"));
                 user.setName(resultSet.getString("NAME"));
-                user.setPassword(resultSet.getBytes("PASSWORD"));;
+                user.setPassword(resultSet.getString("PASSWORD"));
+                user.setSalt(resultSet.getString("SALT"));
                 user.setRole(resultSet.getString("ROLE"));
 
                 users.add(user);
@@ -68,7 +73,8 @@ public class UserDaoImpl implements UserDao{
             if(resultSet.next()) {
                 user.setId(resultSet.getInt("ID"));
                 user.setName(resultSet.getString("NAME"));
-                user.setPassword(resultSet.getBytes("PASSWORD"));
+                user.setPassword(resultSet.getString("PASSWORD"));
+                user.setSalt(resultSet.getString("SALT"));
                 user.setRole(resultSet.getString("ROLE"));
             }
 
@@ -93,9 +99,10 @@ public class UserDaoImpl implements UserDao{
         try{
             preparedStatement = databaseConnector.getPrepareStatement(UPDATE_USER_QUERY);
             preparedStatement.setString(1, entity.getName());
-            preparedStatement.setBytes(2, entity.getPassword());
-            preparedStatement.setString(3, entity.getRole());
-            preparedStatement.setInt(4, entity.getId());
+            preparedStatement.setString(2, entity.getPassword());
+            preparedStatement.setString(3, entity.getSalt());
+            preparedStatement.setString(4, entity.getRole());
+            preparedStatement.setInt(5, entity.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -138,8 +145,9 @@ public class UserDaoImpl implements UserDao{
         try{
             preparedStatement = databaseConnector.getPrepareStatement(INSERT_USER_QUERY);
             preparedStatement.setString(1, entity.getName());
-            preparedStatement.setBytes(2, entity.getPassword());
-            preparedStatement.setString(3, entity.getRole());
+            preparedStatement.setString(2, entity.getPassword());
+            preparedStatement.setString(3, entity.getSalt());
+            preparedStatement.setString(4, entity.getRole());
             preparedStatement.execute();
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);

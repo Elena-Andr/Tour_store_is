@@ -12,5 +12,5 @@ public interface UserService {
     void delete(int id) throws UserDaoException;
     void create(User entity) throws UserDaoException;
     boolean isUserAlreadyRegistered(String userName) throws UserDaoException;
-    User validateLogin(String userName, String password) throws UserDaoException;
+    User validateLogin(User entity) throws UserDaoException;
 }

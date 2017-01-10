@@ -1,3 +1,4 @@
+<%@ page import="ru.innopolis.tourstore.entity.User" %>
 <%@ page language="java" pageEncoding="UTF-8" session="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -17,9 +18,9 @@
         <td>${tour.getDescription()}</td>
       <td>
         <%
-          if(request.getSession().getAttribute("userrole") != null) {
-            String role = (String) request.getSession().getAttribute("userrole");
-            if (role.equals("admin")) {%>
+          User user = (User) request.getAttribute("user");
+          if(user != null) {
+            if (user.getRole().equals("admin")) {%>
         <a href="${pageContext.servletContext.contextPath}/store/edit?id=${tour.getId()}">Редактировать</a>
         <a href="${pageContext.servletContext.contextPath}/store/delete?id=${tour.getId()}">Удалить</a>
         <%
@@ -35,9 +36,9 @@
   </c:forEach>
 </table>
   <%
-    if(request.getSession().getAttribute("userrole") != null) {
-      String role = (String) request.getSession().getAttribute("userrole");
-      if (role.equals("admin")) {%>
+    User user = (User) request.getAttribute("user");
+    if(user != null) {;
+      if (user.getRole().equals("admin")) {%>
   <br><a href="${pageContext.servletContext.contextPath}/store/create">Добавить новый тур</a>
   <br><a href="${pageContext.servletContext.contextPath}/stat">Статистика продаж</a>
   <%
@@ -45,12 +46,11 @@
     }
   %>
  <%
-   String userName = (String) request.getSession().getAttribute("username");
-   if(userName == null){%>
+   if(user == null){%>
  <p><a href="register">Регистрация</a></p>
  <p><a href="login">Вход</a></p><%
    }else {%>
- <p>Вы вошли как <%=userName%></p>
+ <p>Вы вошли как <%=user.getName()%></p>
  <p><a href="${pageContext.servletContext.contextPath}/logout">Выйти</a></p><%
    }
  %>

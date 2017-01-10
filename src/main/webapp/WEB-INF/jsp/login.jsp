@@ -1,28 +1,29 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Вход</title>
 </head>
 <body>
-<form action="${pageContext.servletContext.contextPath}/login" method="POST">
+<spring:form action="login" method="POST" modelAttribute="user">
     <table>
         <tr>
             <td align="right" >Логин: </td>
             <td>
-                <input type="text" name="name" maxlength="50">
+                <spring:input path="name" type="text" maxlength="50"/>
             </td>
         </tr>
         <tr>
             <td align="right" >Пароль: </td>
             <td>
-                <input type="password" name="password" maxlength="50">
+                <spring:input path="password" type="password" maxlength="50"/>
             </td>
         </tr>
         <tr>
-            <td><input type="submit" align="center" value="Войти"/></td>
+            <td>  <spring:button>Войти</spring:button></td>
         </tr>
     </table>
-</form>
+</spring:form>
     <p><a href="store">На главную</a></p>
 </body>
 </html>
