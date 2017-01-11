@@ -14,6 +14,7 @@ import java.sql.SQLException;
  */
 public class ConnectionPoolFactory {
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionPoolFactory.class);
+
     private static DataSource dataSource;
 
     static {
@@ -29,7 +30,7 @@ public class ConnectionPoolFactory {
      * Method returns connection from connection pool
      */
     public static Connection getConnection() throws SQLException {
-        Connection connection = null;
+        Connection connection;
         try {
             connection = dataSource.getConnection();
         } catch (SQLException e) {

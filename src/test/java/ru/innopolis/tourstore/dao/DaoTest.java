@@ -16,9 +16,6 @@ import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.exception.OrderDaoException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.exception.UserDaoException;
-import ru.innopolis.tourstore.service.OrderService;
-import ru.innopolis.tourstore.service.TourService;
-import ru.innopolis.tourstore.service.UserService;
 import ru.innopolis.tourstore.filter.PasswordAuthentication;
 
 import static org.junit.Assert.assertEquals;
@@ -27,24 +24,24 @@ import static org.junit.Assert.assertEquals;
 public class DaoTest {
     private static final Logger LOG = LoggerFactory.getLogger(DaoTest.class);
     private IDatabaseConnector dbConnector;
-    private OrderService orderService;
-    private TourService tourService;
-    private UserService userService;
+    private OrderDao orderDaoImpl;
+    private TourDao tourDaoImpl;
+    private UserDao userDaoImpl;
 
     @Before
     public void setUp(){
         try {
             dbConnector = TestDBConnector.getInstance();
 
+            orderDaoImpl = new OrderDaoImpl(dbConnector);
+            tourDaoImpl = new TourDaoImpl(dbConnector);
+            userDaoImpl = new UserDaoImpl(dbConnector);
+
             fillToursTable();
             fillUsersTable();
             fillOrdersTable();
 
-        } catch (OrderDaoException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (TourDaoException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (UserDaoException e) {
+        } catch (OrderDaoException | TourDaoException | UserDaoException e) {
             LOG.error(e.getMessage(), e);
         }
     }
@@ -61,41 +58,38 @@ public class DaoTest {
     @Test
     public void successTest(){
         try {
-            List<Order> orderList = orderService.getAll();
-
-            String result = orderService.getOrderInfo(orderList.get(0));
+            List<Order> orders = orderDaoImpl.getAll();
+            User user = userDaoImpl.getEntityById(orders.get(0).getUserId());
+            Tour tour = tourDaoImpl.getEntityById(orders.get(0).getTourId());
             String expected = "User \"Maria\"  ---- Italy";
+            String result = "User \"" + user.getName() + "\"" + " " + " ---- " + tour.getName();
 
             assertEquals(expected, result);
-        } catch (OrderDaoException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (UserDaoException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (TourDaoException e) {
+        } catch (OrderDaoException | UserDaoException | TourDaoException e) {
             LOG.error(e.getMessage(), e);
         }
     }
 
-    @Test(expected = Exception.class)
-    public void failedTest() throws Exception {
-            OrderDaoImpl orderDaoImpl = new OrderDaoImpl(dbConnector);
-            orderDaoImpl.delete(666);
+    @Test(expected = TourDaoException.class)
+    public void failedTest() throws TourDaoException {
+        Tour tour = new Tour();
+        tour.setName("qwertyuiop[';lkjhgfdssxcvbnm,.ppflgokrtkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+        tourDaoImpl.create(tour);
     }
 
     private void fillToursTable() throws TourDaoException {
-
         Tour tour = new Tour();
         tour.setName("Italy");
         tour.setDescription("Sample Italy tour description");
-        tourService.create(tour);
+        tourDaoImpl.create(tour);
 
         tour.setName("Germany");
         tour.setDescription("Sample Germany tour description");
-        tourService.create(tour);
+        tourDaoImpl.create(tour);
 
         tour.setName("France");
         tour.setDescription("Sample France tour description");
-        tourService.create(tour);
+        tourDaoImpl.create(tour);
     }
 
     private void fillUsersTable() throws UserDaoException {
@@ -109,12 +103,12 @@ public class DaoTest {
         String hashedPassword = PasswordAuthentication.hashPassword(password,user.getSalt());
         user.setPassword(hashedPassword);
 
-        userService.create(user);
+        userDaoImpl.create(user);
 
         user.setName("admin");
         user.setRole("admin");
         user.setPassword(hashedPassword);
-        userService.create(user);
+        userDaoImpl.create(user);
     }
 
     private void fillOrdersTable() throws OrderDaoException {
@@ -123,6 +117,6 @@ public class DaoTest {
         order.setUserId(1);
         order.setTourId(1);
 
-        orderService.create(order);
+        orderDaoImpl.create(order);
     }
 }

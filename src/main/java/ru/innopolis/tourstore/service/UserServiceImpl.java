@@ -6,8 +6,6 @@ import ru.innopolis.tourstore.dao.UserDao;
 import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.exception.UserDaoException;
 import ru.innopolis.tourstore.filter.PasswordAuthentication;
-
-import java.util.Arrays;
 import java.util.List;
 
 @Service

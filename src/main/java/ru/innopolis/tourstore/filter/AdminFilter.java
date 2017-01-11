@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Object is used for filtering users on specific pages
+ * Object is used for filtering users on pages for admins only.
  */
 public class AdminFilter implements Filter {
     private static final Logger LOG = LoggerFactory.getLogger(AdminFilter.class);
@@ -28,6 +28,7 @@ public class AdminFilter implements Filter {
             if(user == null){
                 RequestDispatcher rd = req.getRequestDispatcher("/login.jsp");
                 rd.forward(request, response);
+                return;
             }
 
             if ( user.getRole().equals("admin")) {

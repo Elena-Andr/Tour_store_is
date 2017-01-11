@@ -15,10 +15,10 @@ public class PasswordAuthentication {
     private static final Logger LOG = LoggerFactory.getLogger(PasswordAuthentication.class);
 
     /**
-     *
+     * Method hashes password with specific salt
      * @param password
      * @param salt
-     * @return
+     * @return String representation of hashes and salt password
      */
     public static String hashPassword(String password, String salt){
         String hash = null;
@@ -42,8 +42,8 @@ public class PasswordAuthentication {
     }
 
     /**
-     * Method generates random bytes
-     * @return
+     * Method generates random salt
+     * @return String representation of salt
      */
     public static String generateSalt(){
         SecureRandom random = new SecureRandom();

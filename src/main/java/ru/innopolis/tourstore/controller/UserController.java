@@ -9,7 +9,9 @@ import ru.innopolis.tourstore.exception.UserDaoException;
 import ru.innopolis.tourstore.service.UserService;
 import javax.servlet.http.HttpSession;
 
-
+/**
+ * Controller which handles authorization actions
+ */
 @Controller
 public class UserController extends AbstractController {
 
@@ -45,7 +47,6 @@ public class UserController extends AbstractController {
             }
 
             user.setRole("user");
-
             userService.create(user);
             return "registerSuccess";
     }

@@ -22,9 +22,7 @@ public class TestDBConnector implements IDatabaseConnector {
             statement.execute(SQLConstants.CREATE_TABLE_USERS_QUERY);
             statement.execute(SQLConstants.CREATE_TABLE_TOURS_QUERY);
             statement.execute(SQLConstants.CREATE_TABLE_ORDERS_QUERY);
-        } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             LOG.error(e.getMessage(), e);
         }
     }

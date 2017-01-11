@@ -130,7 +130,6 @@ public class TourDaoImpl implements TourDao {
                 databaseConnector.closePreparedStatement(preparedStatement);
             }
         }
-
     }
 
     /**

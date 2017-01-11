@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Object is used for filtering users on pages for users only.
+ */
 public class CommonUserFilter implements Filter {
     private static final Logger LOG = LoggerFactory.getLogger(CommonUserFilter.class);
 
@@ -26,6 +29,7 @@ public class CommonUserFilter implements Filter {
             if(user == null){
                 RequestDispatcher rd = req.getRequestDispatcher("/login.jsp");
                 rd.forward(request, response);
+                return;
             }
 
             if (user.getRole().equals("user")) {

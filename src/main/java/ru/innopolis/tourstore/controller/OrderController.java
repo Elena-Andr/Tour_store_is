@@ -29,7 +29,8 @@ public class OrderController extends AbstractController{
     @RequestMapping("/store/order")
     public String getUserOrders(Model model,
                                 HttpSession session,
-                                @RequestParam("id") int tourId) throws UserDaoException, OrderDaoException, TourDaoException {
+                                @RequestParam("id") int tourId)
+            throws UserDaoException, OrderDaoException, TourDaoException {
 
         User user = (User)session.getAttribute("user");
 
