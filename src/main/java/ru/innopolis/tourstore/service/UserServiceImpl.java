@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.innopolis.tourstore.dao.UserDao;
 import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.exception.UserDaoException;
-import ru.innopolis.tourstore.filter.PasswordAuthentication;
 import java.util.List;
 
 @Service
@@ -40,9 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User entity) throws UserDaoException{
-        entity.setSalt(PasswordAuthentication.generateSalt());
-        String hashedPassword = PasswordAuthentication.hashPassword(entity.getPassword().trim(), entity.getSalt());
-        entity.setPassword(hashedPassword);
         userDao.create(entity);
     }
 
@@ -59,15 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User validateLogin(User entity) throws UserDaoException {
-        List<User> users = userDao.getAll();
-
-        for (User user : users) {
-            String hashedPassword = PasswordAuthentication.hashPassword(entity.getPassword(), user.getSalt());
-            if (user.getName().equals(entity.getName()) && hashedPassword.equals(user.getPassword())) {
-                return user;
-            }
-        }
-        return null;
+    public User getEntityByName(String userName) throws UserDaoException {
+        return userDao.getEntityByName(userName);
     }
 }

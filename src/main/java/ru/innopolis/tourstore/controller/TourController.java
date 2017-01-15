@@ -3,19 +3,21 @@ package ru.innopolis.tourstore.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.innopolis.tourstore.entity.Tour;
-import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.exception.InvalidInputDataException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.service.TourService;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.function.Predicate;
 
 /**
  * Controller which handles actions with tours
  */
+
 @Controller
 public class TourController extends AbstractController {
 
@@ -26,13 +28,10 @@ public class TourController extends AbstractController {
         this.tourService = tourService;
     }
 
-    @ModelAttribute("tour")
-    public Tour createTour() {
-        return new Tour();
-    }
-
     @RequestMapping("/store")
-    public String getToursList(Model model, HttpSession session) throws TourDaoException{
+    public String getToursList(Model model, HttpServletRequest request)
+            throws TourDaoException{
+
         //Show only not deleted tours
         List<Tour> availableTours = tourService.getAll();
         Predicate<Tour> tourPredicate = Tour::isDeleted;
@@ -40,24 +39,32 @@ public class TourController extends AbstractController {
 
         model.addAttribute("tours", availableTours);
 
-        User user = (User)session.getAttribute("user");
-        if(user != null){
-            model.addAttribute("user", user);
+        //Add current user name and role to model
+        if(request.getUserPrincipal() != null){
+            model.addAttribute("username", request.getUserPrincipal().getName());
+            model.addAttribute("user_role", request.isUserInRole("ROLE_USER") ? "ROLE_USER" : "ROLE_ADMIN");
+        }else {
+            model.addAttribute("username", "guest");
+            model.addAttribute("user_role", "guest");
         }
 
         return "ToursView";
     }
 
     @RequestMapping(path = "/store/create", method = RequestMethod.GET)
-    public String getTourCreationPage(){
+    public String getTourCreationPage(Model model){
+        model.addAttribute("tour", new Tour());
         return "CreateTour";
     }
 
     @RequestMapping(path = "/store/create", method = RequestMethod.POST)
-    public String createNewTour(@ModelAttribute("tour") Tour tour)
+    public String createNewTour(@Valid Tour tour, BindingResult bindingResult)
             throws TourDaoException, InvalidInputDataException {
 
-        checkInputData(tour);
+        if(bindingResult.hasErrors()){
+            return "CreateTour";
+        }
+
         tour.setDeleted(false);
         tourService.create(tour);
 
@@ -76,7 +83,9 @@ public class TourController extends AbstractController {
     }
 
     @RequestMapping(path = "/store/edit", method = RequestMethod.GET)
-    public String getEditTourPage(Model model, @RequestParam("id") int tourIdToEdit) throws TourDaoException {
+    public String getEditTourPage(Model model,
+                                  @RequestParam("id") int tourIdToEdit)
+            throws TourDaoException {
 
         Tour tour = tourService.getEntityById(tourIdToEdit);
         model.addAttribute("tour", tour);
@@ -84,17 +93,14 @@ public class TourController extends AbstractController {
     }
 
     @RequestMapping(path = "/store/edit", method = RequestMethod.POST)
-    public String editTour(@ModelAttribute("tour") Tour tour)
+    public String editTour(@Valid Tour tour, BindingResult bindingResult)
             throws TourDaoException, InvalidInputDataException {
 
-        checkInputData(tour);
+        if(bindingResult.hasErrors()){
+            return "EditTour";
+        }
+
         tourService.update(tour);
         return "redirect:/store";
-    }
-
-    private void checkInputData(Tour tour) throws InvalidInputDataException {
-        if(tour.getName().trim().length() == 0 || tour.getDescription().trim().length() == 0){
-            throw new InvalidInputDataException("Please specify correct tour information");
-        }
     }
 }

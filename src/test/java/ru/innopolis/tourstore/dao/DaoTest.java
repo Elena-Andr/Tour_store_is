@@ -16,7 +16,6 @@ import ru.innopolis.tourstore.entity.User;
 import ru.innopolis.tourstore.exception.OrderDaoException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.exception.UserDaoException;
-import ru.innopolis.tourstore.filter.PasswordAuthentication;
 
 import static org.junit.Assert.assertEquals;
 
@@ -97,17 +96,14 @@ public class DaoTest {
         User user = new User();
         user.setName("Maria");
         user.setRole("user");
-        user.setSalt(PasswordAuthentication.generateSalt());
-
         String password = "123";
-        String hashedPassword = PasswordAuthentication.hashPassword(password,user.getSalt());
-        user.setPassword(hashedPassword);
+        user.setPassword(password);
 
         userDaoImpl.create(user);
 
         user.setName("admin");
         user.setRole("admin");
-        user.setPassword(hashedPassword);
+        user.setPassword(password);
         userDaoImpl.create(user);
     }
 

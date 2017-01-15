@@ -1,29 +1,39 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Вход</title>
 </head>
 <body>
-<spring:form action="login" method="POST" modelAttribute="user">
+<h2>Login with Username and Password</h2>
+
+<c:if test="${not empty error}">
+    <div class="error">${error}</div>
+</c:if>
+<c:if test="${not empty msg}">
+    <div class="msg">${msg}</div>
+</c:if>
+
+<form name='loginForm' action="<c:url value='/login' />" method='POST'>
     <table>
         <tr>
-            <td align="right" >Логин: </td>
-            <td>
-                <spring:input path="name" type="text" maxlength="50"/>
-            </td>
+            <td>User:</td>
+            <td><input type='text' name='NAME'></td>
         </tr>
         <tr>
-            <td align="right" >Пароль: </td>
-            <td>
-                <spring:input path="password" type="password" maxlength="50"/>
-            </td>
+            <td>Password:</td>
+            <td><input type='password' name='PASSWORD' /></td>
         </tr>
         <tr>
-            <td>  <spring:button>Войти</spring:button></td>
+            <td colspan='2'><input name="submit" type="submit" value="submit" /></td>
         </tr>
     </table>
-</spring:form>
+
+    <input type="hidden" name="${_csrf.parameterName}"
+           value="${_csrf.token}" />
+</form>
     <p><a href="store">На главную</a></p>
 </body>
 </html>

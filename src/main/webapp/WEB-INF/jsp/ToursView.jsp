@@ -1,4 +1,3 @@
-<%@ page import="ru.innopolis.tourstore.entity.User" %>
 <%@ page language="java" pageEncoding="UTF-8" session="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -17,42 +16,28 @@
         <td>${tour.getName()}</td>
         <td>${tour.getDescription()}</td>
       <td>
-        <%
-          User user = (User) request.getAttribute("user");
-          if(user != null) {
-            if (user.getRole().equals("admin")) {%>
+        <c:if test="${user_role == 'ROLE_ADMIN'}">
         <a href="${pageContext.servletContext.contextPath}/store/edit?id=${tour.getId()}">Редактировать</a>
         <a href="${pageContext.servletContext.contextPath}/store/delete?id=${tour.getId()}">Удалить</a>
-        <%
-            }else{
-        %>
-        <a href="${pageContext.servletContext.contextPath}/store/order?id=${tour.getId()}">Купить</a>
-        <%
-            }
-          }
-        %>
+        </c:if>
+          <c:if test="${user_role == 'ROLE_USER'}">
+              <a href="${pageContext.servletContext.contextPath}/store/order?id=${tour.getId()}">Купить</a>
+          </c:if>
       </td>
     </tr>
   </c:forEach>
 </table>
-  <%
-    User user = (User) request.getAttribute("user");
-    if(user != null) {;
-      if (user.getRole().equals("admin")) {%>
+  <c:if test="${user_role == 'ROLE_ADMIN'}">
   <br><a href="${pageContext.servletContext.contextPath}/store/create">Добавить новый тур</a>
   <br><a href="${pageContext.servletContext.contextPath}/stat">Статистика продаж</a>
-  <%
-      }
-    }
-  %>
- <%
-   if(user == null){%>
- <p><a href="register">Регистрация</a></p>
- <p><a href="login">Вход</a></p><%
-   }else {%>
- <p>Вы вошли как <%=user.getName()%></p>
- <p><a href="${pageContext.servletContext.contextPath}/logout">Выйти</a></p><%
-   }
- %>
+</c:if>
+ <p>Вы вошли как ${username} </p>
+  <c:if test="${user_role == 'guest'}">
+    <p><a href="register">Регистрация</a></p>
+    <p><a href="login">Вход</a></p>
+  </c:if>
+  <c:if test="${user_role != 'guest'}">
+    <p><a href="${pageContext.servletContext.contextPath}/logout">Выйти</a></p>
+  </c:if>
 </body>
 </html>

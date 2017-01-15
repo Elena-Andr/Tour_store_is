@@ -45,8 +45,8 @@ public class UserDaoImpl implements UserDao{
                 user.setId(resultSet.getInt("ID"));
                 user.setName(resultSet.getString("NAME"));
                 user.setPassword(resultSet.getString("PASSWORD"));
-                user.setSalt(resultSet.getString("SALT"));
                 user.setRole(resultSet.getString("ROLE"));
+                user.setEnabled(resultSet.getBoolean("ENABLED"));
 
                 users.add(user);
             }
@@ -74,8 +74,36 @@ public class UserDaoImpl implements UserDao{
                 user.setId(resultSet.getInt("ID"));
                 user.setName(resultSet.getString("NAME"));
                 user.setPassword(resultSet.getString("PASSWORD"));
-                user.setSalt(resultSet.getString("SALT"));
                 user.setRole(resultSet.getString("ROLE"));
+                user.setEnabled(resultSet.getBoolean("ENABLED"));
+            }
+
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+            throw new UserDaoException(e.getMessage());
+        } finally {
+            if(preparedStatement != null){
+                databaseConnector.closePreparedStatement(preparedStatement);
+            }
+        }
+        return user;
+    }
+
+    @Override
+    public User getEntityByName(String name) throws UserDaoException {
+        User user = new User();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = databaseConnector.getPrepareStatement(SELECT_USER_BY_NAME_QUERY);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                user.setId(resultSet.getInt("ID"));
+                user.setName(resultSet.getString("NAME"));
+                user.setPassword(resultSet.getString("PASSWORD"));
+                user.setRole(resultSet.getString("ROLE"));
+                user.setEnabled(resultSet.getBoolean("ENABLED"));
             }
 
         } catch (SQLException e) {
@@ -100,9 +128,10 @@ public class UserDaoImpl implements UserDao{
             preparedStatement = databaseConnector.getPrepareStatement(UPDATE_USER_QUERY);
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getPassword());
-            preparedStatement.setString(3, entity.getSalt());
+            preparedStatement.setBoolean(3, entity.isEnabled());
             preparedStatement.setString(4, entity.getRole());
             preparedStatement.setInt(5, entity.getId());
+
             preparedStatement.execute();
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -146,7 +175,7 @@ public class UserDaoImpl implements UserDao{
             preparedStatement = databaseConnector.getPrepareStatement(INSERT_USER_QUERY);
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getPassword());
-            preparedStatement.setString(3, entity.getSalt());
+            preparedStatement.setBoolean(3, entity.isEnabled());
             preparedStatement.setString(4, entity.getRole());
             preparedStatement.execute();
         } catch (SQLException e) {

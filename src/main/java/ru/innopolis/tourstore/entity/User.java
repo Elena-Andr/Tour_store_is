@@ -1,15 +1,25 @@
 package ru.innopolis.tourstore.entity;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Object represents entity "User"
  */
 public class User {
 
     private int id;
+
+    @NotNull(message = "Name cannot be empty")
+    @Size(min = 3, max = 10, message = "Invalid input")
     private String name;
+
+    @NotNull(message = "Password cannot be empty")
+    @Size(min = 3, max = 10, message = "Invalid input")
     private String password;
-    private String salt;
+
     private String role;
+    private Boolean enabled;
 
     public int getId() {
         return id;
@@ -17,14 +27,6 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getName() {
@@ -49,5 +51,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Boolean isEnabled(){
+        return enabled;
+    }
+
+    public void setEnabled(Boolean value){
+        this.enabled = value;
     }
 }

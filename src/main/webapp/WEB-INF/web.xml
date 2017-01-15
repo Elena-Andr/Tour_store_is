@@ -3,32 +3,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <filter>
-        <filter-name>AdminFilter</filter-name>
-        <filter-class>ru.innopolis.tourstore.filter.AdminFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AdminFilter</filter-name>
-        <url-pattern>/store/delete</url-pattern>
-        <url-pattern>/store/edit</url-pattern>
-        <url-pattern>/store/create</url-pattern>
-        <url-pattern>/stat</url-pattern>
-    </filter-mapping>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/security-context.xml
+            /WEB-INF/Spring-Datasource.xml
+        </param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
 
     <filter>
-        <filter-name>UserFilter</filter-name>
-        <filter-class>ru.innopolis.tourstore.filter.CommonUserFilter</filter-class>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>UserFilter</filter-name>
-        <url-pattern>/store/order</url-pattern>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-    <resource-ref>
-        <res-ref-name>jdbc/tourstore</res-ref-name>
-        <res-type>javax.sql.DataSource</res-type>
-        <res-auth>Container</res-auth>
-    </resource-ref>
 
     <servlet>
         <servlet-name>Main</servlet-name>

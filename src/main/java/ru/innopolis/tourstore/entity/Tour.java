@@ -1,14 +1,23 @@
 package ru.innopolis.tourstore.entity;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Object represents entity "Tour"
  */
 public class Tour {
 
     private int id;
-    private String name;
-    private String description;
     private boolean isDeleted;
+
+    @NotNull(message="Cannot be Null")
+    @Size(min=3, max=30, message = "Invalid input")
+    private String name;
+
+    @NotNull(message="Cannot be Null")
+    @Size(min=3, max=30, message = "Invalid input")
+    private String description;
 
     public boolean isDeleted() {
         return isDeleted;

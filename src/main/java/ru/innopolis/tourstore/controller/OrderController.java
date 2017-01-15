@@ -11,8 +11,8 @@ import ru.innopolis.tourstore.exception.OrderDaoException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.exception.UserDaoException;
 import ru.innopolis.tourstore.service.OrderService;
-
-import javax.servlet.http.HttpSession;
+import ru.innopolis.tourstore.service.UserService;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -20,19 +20,23 @@ import java.util.function.Predicate;
 public class OrderController extends AbstractController{
 
     private OrderService orderService;
+    private UserService userService;
 
     @Autowired
-    public OrderController(OrderService orderService){
+    public OrderController(OrderService orderService, UserService userService){
         this.orderService = orderService;
+        this.userService = userService;
     }
 
     @RequestMapping("/store/order")
     public String getUserOrders(Model model,
-                                HttpSession session,
+                                HttpServletRequest request,
                                 @RequestParam("id") int tourId)
             throws UserDaoException, OrderDaoException, TourDaoException {
 
-        User user = (User)session.getAttribute("user");
+        // Get signed in user
+        String userName = request.getUserPrincipal().getName();
+        User user = userService.getEntityByName(userName);
 
         //Add the tour to the user's orders
         Order order = new Order();
