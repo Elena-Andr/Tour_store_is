@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.innopolis.tourstore.entity.Tour;
+import ru.innopolis.tourstore.entity.TourEntity;
 import ru.innopolis.tourstore.exception.InvalidInputDataException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.service.TourService;
@@ -19,7 +19,7 @@ import java.util.function.Predicate;
  */
 
 @Controller
-public class TourController extends AbstractController {
+public class TourController{
 
     private TourService tourService;
 
@@ -33,8 +33,8 @@ public class TourController extends AbstractController {
             throws TourDaoException{
 
         //Show only not deleted tours
-        List<Tour> availableTours = tourService.getAll();
-        Predicate<Tour> tourPredicate = Tour::isDeleted;
+        List<TourEntity> availableTours = tourService.getAll();
+        Predicate<TourEntity> tourPredicate = TourEntity::isDeleted;
         availableTours.removeIf(tourPredicate);
 
         model.addAttribute("tours", availableTours);
@@ -53,12 +53,12 @@ public class TourController extends AbstractController {
 
     @RequestMapping(path = "/store/create", method = RequestMethod.GET)
     public String getTourCreationPage(Model model){
-        model.addAttribute("tour", new Tour());
+        model.addAttribute("tour", new TourEntity());
         return "CreateTour";
     }
 
     @RequestMapping(path = "/store/create", method = RequestMethod.POST)
-    public String createNewTour(@Valid Tour tour, BindingResult bindingResult)
+    public String createNewTour(@Valid TourEntity tour, BindingResult bindingResult)
             throws TourDaoException, InvalidInputDataException {
 
         if(bindingResult.hasErrors()){
@@ -75,7 +75,7 @@ public class TourController extends AbstractController {
     public String deleteTour(@RequestParam("id") int tourIdToDelete) throws TourDaoException {
 
         //Mark tour entity as deleted
-        Tour tourToDelete = tourService.getEntityById(tourIdToDelete);
+        TourEntity tourToDelete = tourService.getEntityById(tourIdToDelete);
         tourToDelete.setDeleted(true);
         tourService.update(tourToDelete);
 
@@ -87,13 +87,13 @@ public class TourController extends AbstractController {
                                   @RequestParam("id") int tourIdToEdit)
             throws TourDaoException {
 
-        Tour tour = tourService.getEntityById(tourIdToEdit);
+        TourEntity tour = tourService.getEntityById(tourIdToEdit);
         model.addAttribute("tour", tour);
         return "EditTour";
     }
 
     @RequestMapping(path = "/store/edit", method = RequestMethod.POST)
-    public String editTour(@Valid Tour tour, BindingResult bindingResult)
+    public String editTour(@Valid TourEntity tour, BindingResult bindingResult)
             throws TourDaoException, InvalidInputDataException {
 
         if(bindingResult.hasErrors()){

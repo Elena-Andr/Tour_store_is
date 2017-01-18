@@ -1,11 +1,12 @@
 package ru.innopolis.tourstore.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.innopolis.tourstore.dao.OrderDao;
-import ru.innopolis.tourstore.entity.Order;
-import ru.innopolis.tourstore.entity.Tour;
-import ru.innopolis.tourstore.entity.User;
+import ru.innopolis.tourstore.entity.OrderEntity;
+import ru.innopolis.tourstore.entity.TourEntity;
+import ru.innopolis.tourstore.entity.UserEntity;
 import ru.innopolis.tourstore.exception.OrderDaoException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.exception.UserDaoException;
@@ -20,7 +21,7 @@ public class OrderServiceImpl implements OrderService {
     private TourService tourService;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao){
+    public OrderServiceImpl(@Qualifier("orderDaoImplHibernate") OrderDao orderDao){
         this.orderDao = orderDao;
     }
 
@@ -35,17 +36,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAll() throws OrderDaoException{
+    public List<OrderEntity> getAll() throws OrderDaoException{
         return orderDao.getAll();
     }
 
     @Override
-    public Order getEntityById(int id) throws OrderDaoException {
+    public OrderEntity getEntityById(int id) throws OrderDaoException {
         return orderDao.getEntityById(id);
     }
 
     @Override
-    public void update(Order entity) throws OrderDaoException {
+    public void update(OrderEntity entity) throws OrderDaoException {
         orderDao.update(entity);
     }
 
@@ -55,21 +56,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void create(Order entity) throws OrderDaoException {
+    public void create(OrderEntity entity) throws OrderDaoException {
         orderDao.create(entity);
     }
 
     @Override
-    public String getOrderInfo(Order order) throws UserDaoException, TourDaoException {
-        User user = userService.getEntityById(order.getUserId());
-        Tour tour = tourService.getEntityById(order.getTourId());
+    public String getOrderInfo(OrderEntity order) throws UserDaoException, TourDaoException {
+        UserEntity user = userService.getEntityById(order.getUserId());
+        TourEntity tour = tourService.getEntityById(order.getTourId());
         return "User \"" + user.getName() + "\"" + " " + " ---- " + tour.getName();
     }
 
     @Override
-    public List<String> getOrderInfos(List<Order> orders) throws UserDaoException, TourDaoException {
+    public List<String> getOrderInfos(List<OrderEntity> orders) throws UserDaoException, TourDaoException {
         List<String> orderInfos = new ArrayList<>();
-        for(Order order : orders){
+        for(OrderEntity order : orders){
             orderInfos.add(getOrderInfo(order));
         }
         return orderInfos;

@@ -1,11 +1,12 @@
-package ru.innopolis.tourstore.dao;
+package ru.innopolis.tourstore.dao.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.innopolis.tourstore.dao.TourDao;
 import ru.innopolis.tourstore.db.IDatabaseConnector;
-import ru.innopolis.tourstore.entity.Tour;
 import org.springframework.stereotype.Repository;
+import ru.innopolis.tourstore.entity.TourEntity;
 import ru.innopolis.tourstore.exception.TourDaoException;
 
 import java.sql.PreparedStatement;
@@ -35,13 +36,13 @@ public class TourDaoImpl implements TourDao {
      * @throws TourDaoException in case of SQL exception
      */
     @Override
-    public List<Tour> getAll() throws TourDaoException {
-        List<Tour> tours = new ArrayList<>();
+    public List<TourEntity> getAll() throws TourDaoException {
+        List<TourEntity> tours = new ArrayList<>();
         try{
             ResultSet resultSet = databaseConnector.getStatement().executeQuery(SELECT_ALL_TOURS_QUERY);
 
             while (resultSet.next()){
-                Tour tour = new Tour();
+                TourEntity tour = new TourEntity();
 
                 tour.setId(resultSet.getInt("ID"));
                 tour.setName(resultSet.getString("NAME"));
@@ -62,8 +63,8 @@ public class TourDaoImpl implements TourDao {
      * @throws TourDaoException in case of SQL exception
      */
     @Override
-    public Tour getEntityById(int id) throws TourDaoException {
-        Tour tour = new Tour();
+    public TourEntity getEntityById(int id) throws TourDaoException {
+        TourEntity tour = new TourEntity();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = databaseConnector.getPrepareStatement(SELECT_TOUR_QUERY);
@@ -91,7 +92,7 @@ public class TourDaoImpl implements TourDao {
      * @throws TourDaoException in case of SQL exception
      */
     @Override
-    public void update(Tour entity) throws TourDaoException {
+    public void update(TourEntity entity) throws TourDaoException {
         PreparedStatement preparedStatement = null;
         try{
             preparedStatement = databaseConnector.getPrepareStatement(UPDATE_TOUR_QUERY);
@@ -137,7 +138,7 @@ public class TourDaoImpl implements TourDao {
      * @throws TourDaoException in case of SQL exception
      */
     @Override
-    public void create(Tour entity) throws TourDaoException {
+    public void create(TourEntity entity) throws TourDaoException {
         PreparedStatement preparedStatement = null;
         try{
             preparedStatement = databaseConnector.getPrepareStatement(INSERT_TOUR_QUERY);

@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<form:form method="POST" action="/register" modelAttribute="user" >
+<form:form method="POST" action="/register" modelAttribute="userEntity" >
     <table>
         <tr>
             <td>Username:</td>

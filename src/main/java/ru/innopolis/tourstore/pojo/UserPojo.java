@@ -1,23 +1,10 @@
-package ru.innopolis.tourstore.entity;
+package ru.innopolis.tourstore.pojo;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-/**
- * Object represents entity "User"
- */
-public class User {
+public class UserPojo {
 
     private int id;
-
-    @NotNull(message = "Name cannot be empty")
-    @Size(min = 3, max = 10, message = "Invalid input")
     private String name;
-
-    @NotNull(message = "Password cannot be empty")
-    @Size(min = 3, max = 10, message = "Invalid input")
     private String password;
-
     private String role;
     private Boolean enabled;
 

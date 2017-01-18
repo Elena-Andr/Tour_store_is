@@ -1,16 +1,18 @@
-package ru.innopolis.tourstore.dao;
+package ru.innopolis.tourstore.dao.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.innopolis.tourstore.dao.UserDao;
 import ru.innopolis.tourstore.db.IDatabaseConnector;
-import ru.innopolis.tourstore.entity.User;
+import ru.innopolis.tourstore.entity.UserEntity;
 import ru.innopolis.tourstore.exception.UserDaoException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import static ru.innopolis.tourstore.db.SQLConstants.*;
@@ -19,7 +21,7 @@ import static ru.innopolis.tourstore.db.SQLConstants.*;
  * Object represents DAO for user entity
  */
 @Repository
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
     private static final Logger LOG = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private IDatabaseConnector databaseConnector;
@@ -34,13 +36,13 @@ public class UserDaoImpl implements UserDao{
      * @throws UserDaoException in case of SQL exception
      */
     @Override
-    public List<User> getAll() throws UserDaoException {
-        List<User> users = new ArrayList<>();
+    public List<UserEntity> getAll() throws UserDaoException {
+        List<UserEntity> users = new ArrayList<>();
         try{
             ResultSet resultSet = databaseConnector.getStatement().executeQuery(SELECT_ALL_USERS_QUERY);
 
             while (resultSet.next()){
-                User user = new User();
+                UserEntity user = new UserEntity();
 
                 user.setId(resultSet.getInt("ID"));
                 user.setName(resultSet.getString("NAME"));
@@ -62,8 +64,8 @@ public class UserDaoImpl implements UserDao{
      * @throws UserDaoException in case of SQL exception
      */
     @Override
-    public User getEntityById(int id) throws UserDaoException {
-        User user = new User();
+    public UserEntity getEntityById(int id) throws UserDaoException {
+        UserEntity user = new UserEntity();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = databaseConnector.getPrepareStatement(SELECT_USER_QUERY);
@@ -90,8 +92,8 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public User getEntityByName(String name) throws UserDaoException {
-        User user = new User();
+    public UserEntity getEntityByName(String name) throws UserDaoException {
+        UserEntity user = new UserEntity();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = databaseConnector.getPrepareStatement(SELECT_USER_BY_NAME_QUERY);
@@ -122,7 +124,7 @@ public class UserDaoImpl implements UserDao{
      * @throws UserDaoException in case of SQL exception
      */
     @Override
-    public void update(User entity) throws UserDaoException {
+    public void update(UserEntity entity) throws UserDaoException {
         PreparedStatement preparedStatement = null;
         try{
             preparedStatement = databaseConnector.getPrepareStatement(UPDATE_USER_QUERY);
@@ -169,7 +171,7 @@ public class UserDaoImpl implements UserDao{
      * @throws UserDaoException in case of SQL exception
      */
     @Override
-    public void create(User entity) throws UserDaoException {
+    public void create(UserEntity entity) throws UserDaoException {
         PreparedStatement preparedStatement = null;
         try{
             preparedStatement = databaseConnector.getPrepareStatement(INSERT_USER_QUERY);

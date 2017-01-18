@@ -5,8 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.innopolis.tourstore.entity.Order;
-import ru.innopolis.tourstore.entity.User;
+import ru.innopolis.tourstore.entity.OrderEntity;
+import ru.innopolis.tourstore.entity.UserEntity;
 import ru.innopolis.tourstore.exception.OrderDaoException;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import ru.innopolis.tourstore.exception.UserDaoException;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Controller
-public class OrderController extends AbstractController{
+public class OrderController{
 
     private OrderService orderService;
     private UserService userService;
@@ -36,17 +36,17 @@ public class OrderController extends AbstractController{
 
         // Get signed in user
         String userName = request.getUserPrincipal().getName();
-        User user = userService.getEntityByName(userName);
+        UserEntity user = userService.getEntityByName(userName);
 
         //Add the tour to the user's orders
-        Order order = new Order();
+        OrderEntity order = new OrderEntity();
         order.setTourId(tourId);
         order.setUserId(user.getId());
         orderService.create(order);
 
         //Show all orders of the user
-        List<Order> orders = orderService.getAll();
-        Predicate<Order> orderPredicate = (Order o) -> o.getUserId() != user.getId();
+        List<OrderEntity> orders = orderService.getAll();
+        Predicate<OrderEntity> orderPredicate = (OrderEntity o) -> o.getUserId() != user.getId();
         orders.removeIf(orderPredicate);
         model.addAttribute("myOrders", orderService.getOrderInfos(orders));
 
@@ -55,7 +55,7 @@ public class OrderController extends AbstractController{
 
     @RequestMapping("/stat")
     public String getAllOrders(Model model) throws UserDaoException, OrderDaoException, TourDaoException {
-            List<Order> orders = orderService.getAll();
+            List<OrderEntity> orders = orderService.getAll();
             List<String> orderInfos = orderService.getOrderInfos(orders);
             model.addAttribute("orders", orderInfos);
             return "OrdersView";

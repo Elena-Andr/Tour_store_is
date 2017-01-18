@@ -1,22 +1,10 @@
-package ru.innopolis.tourstore.entity;
+package ru.innopolis.tourstore.pojo;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-/**
- * Object represents entity "Tour"
- */
-public class Tour {
+public class TourPojo {
 
     private int id;
     private boolean isDeleted;
-
-    @NotNull(message="Cannot be Null")
-    @Size(min=3, max=30, message = "Invalid input")
     private String name;
-
-    @NotNull(message="Cannot be Null")
-    @Size(min=3, max=30, message = "Invalid input")
     private String description;
 
     public boolean isDeleted() {

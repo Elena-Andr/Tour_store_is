@@ -1,12 +1,23 @@
 package ru.innopolis.tourstore.entity;
 
+import javax.persistence.*;
+
 /**
  * Object represents entity "Order"
  */
-public class Order {
+@Entity
+@Table(name = "ORDERS")
+public class OrderEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", unique = true, nullable = false)
     private int id;
+
+    @Column(name = "USER_ID", nullable = false)
     private int userId;
+
+    @Column(name = "TOUR_ID", nullable = false)
     private int tourId;
 
     public int getId() {

@@ -1,12 +1,14 @@
 package ru.innopolis.tourstore.controller;
 
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Abstract base class for Controllers
  */
-public abstract class AbstractController {
+@ControllerAdvice
+public class ControllerExceptionsHandler {
 
     /**
      * Method handles all possible arised exceptions in controllers

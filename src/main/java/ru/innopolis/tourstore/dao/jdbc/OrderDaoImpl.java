@@ -1,10 +1,11 @@
-package ru.innopolis.tourstore.dao;
+package ru.innopolis.tourstore.dao.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.innopolis.tourstore.dao.OrderDao;
 import ru.innopolis.tourstore.db.IDatabaseConnector;
-import ru.innopolis.tourstore.entity.Order;
+import ru.innopolis.tourstore.entity.OrderEntity;
 import ru.innopolis.tourstore.exception.OrderDaoException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,13 +35,13 @@ public class OrderDaoImpl implements OrderDao {
      * @throws OrderDaoException in case of SQL exception
      */
     @Override
-    public List<Order> getAll() throws OrderDaoException {
-        List<Order> orders = new ArrayList<>();
+    public List<OrderEntity> getAll() throws OrderDaoException {
+        List<OrderEntity> orders = new ArrayList<>();
         try{
             ResultSet resultSet = databaseConnector.getStatement().executeQuery(SELECT_ALL_ORDERS_QUERY);
 
             while (resultSet.next()){
-                Order order = new Order();
+                OrderEntity order = new OrderEntity();
 
                 order.setId(resultSet.getInt("ID"));
                 order.setUserId(resultSet.getInt("USER_ID"));
@@ -60,8 +61,8 @@ public class OrderDaoImpl implements OrderDao {
      * @throws OrderDaoException in case of SQL exception
      */
     @Override
-    public Order getEntityById(int id) throws OrderDaoException {
-        Order order = new Order();
+    public OrderEntity getEntityById(int id) throws OrderDaoException {
+        OrderEntity order = new OrderEntity();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = databaseConnector.getPrepareStatement(SELECT_ORDER_QUERY);
@@ -88,7 +89,7 @@ public class OrderDaoImpl implements OrderDao {
      * @throws OrderDaoException in case of SQL exception
      */
     @Override
-    public void update(Order entity) throws OrderDaoException {
+    public void update(OrderEntity entity) throws OrderDaoException {
         PreparedStatement preparedStatement = null;
         try{
             preparedStatement = databaseConnector.getPrepareStatement(UPDATE_ORDER_QUERY);
@@ -132,7 +133,7 @@ public class OrderDaoImpl implements OrderDao {
      * @throws OrderDaoException in case of SQL exception
      */
     @Override
-    public void create(Order entity) throws OrderDaoException {
+    public void create(OrderEntity entity) throws OrderDaoException {
         PreparedStatement preparedStatement = null;
         try{
             preparedStatement = databaseConnector.getPrepareStatement(INSERT_ORDER_QUERY);

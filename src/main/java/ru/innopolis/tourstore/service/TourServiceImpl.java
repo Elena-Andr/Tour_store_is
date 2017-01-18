@@ -2,8 +2,9 @@ package ru.innopolis.tourstore.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import ru.innopolis.tourstore.dao.TourDao;
-import ru.innopolis.tourstore.entity.Tour;
+import ru.innopolis.tourstore.entity.TourEntity;
 import ru.innopolis.tourstore.exception.TourDaoException;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +16,22 @@ public class TourServiceImpl implements TourService {
     private TourDao tourDao;
 
     @Autowired
-    public TourServiceImpl(TourDao tourDao){
+    public TourServiceImpl(@Qualifier("tourDaoImplHibernate")TourDao tourDao){
         this.tourDao = tourDao;
     }
 
     @Override
-    public List<Tour> getAll() throws TourDaoException{
+    public List<TourEntity> getAll() throws TourDaoException{
         return tourDao.getAll();
     }
 
     @Override
-    public Tour getEntityById(int id) throws TourDaoException {
+    public TourEntity getEntityById(int id) throws TourDaoException {
         return tourDao.getEntityById(id);
     }
 
     @Override
-    public void update(Tour entity) throws TourDaoException {
+    public void update(TourEntity entity) throws TourDaoException {
         tourDao.update(entity);
     }
 
@@ -40,7 +41,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public void create(Tour entity) throws TourDaoException {
+    public void create(TourEntity entity) throws TourDaoException {
         tourDao.create(entity);
     }
 }

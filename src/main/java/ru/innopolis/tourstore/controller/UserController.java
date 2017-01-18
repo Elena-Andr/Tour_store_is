@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import ru.innopolis.tourstore.entity.User;
+import ru.innopolis.tourstore.entity.UserEntity;
 import ru.innopolis.tourstore.exception.InvalidInputDataException;
 import ru.innopolis.tourstore.exception.UserDaoException;
 import ru.innopolis.tourstore.service.UserService;
@@ -18,7 +18,7 @@ import javax.validation.Valid;
  * Controller which handles authorization actions
  */
 @Controller
-public class UserController extends AbstractController {
+public class UserController{
 
     private UserService userService;
     private PasswordEncoder passwordEncoder;
@@ -35,12 +35,12 @@ public class UserController extends AbstractController {
 
     @RequestMapping(path = "/register", method = RequestMethod.GET)
     public String getRegistrationPage(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("userEntity", new UserEntity());
         return "register";
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
-    public String createNewUser(@Valid User userForm, BindingResult bindingResult)
+    public String createNewUser(@Valid UserEntity userForm, BindingResult bindingResult)
             throws InvalidInputDataException, UserDaoException {
 
         //Check if user already exists
@@ -63,7 +63,10 @@ public class UserController extends AbstractController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.GET)
-    public String getLoginPage() {
+    public String getLoginPage(@RequestParam("error") boolean errorOccurred) throws Exception {
+        if(errorOccurred){
+            throw new Exception("Incorrect credentials");
+        }
         return "login";
     }
 
