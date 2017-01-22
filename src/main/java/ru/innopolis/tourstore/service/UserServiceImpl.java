@@ -1,46 +1,47 @@
 package ru.innopolis.tourstore.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.innopolis.tourstore.dao.UserDao;
 import ru.innopolis.tourstore.entity.UserEntity;
 import ru.innopolis.tourstore.exception.UserDaoException;
+import ru.innopolis.tourstore.repository.UserRepository;
+
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(@Qualifier("userDaoImplHibernate") UserDao userDao){
-        this.userDao = userDao;
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public List<UserEntity> getAll() throws UserDaoException{
-        return userDao.getAll();
+        return userRepository.findAll();
     }
 
     @Override
     public UserEntity getEntityById(int id) throws UserDaoException{
-        return userDao.getEntityById(id);
+        return userRepository.findOne(id);
     }
 
     @Override
     public void update(UserEntity entity) throws UserDaoException{
-        userDao.update(entity);
+        userRepository.saveAndFlush(entity);
+
     }
 
     @Override
     public void delete(int id) throws UserDaoException{
-        userDao.delete(id);
+        userRepository.delete(id);
     }
 
     @Override
     public void create(UserEntity entity) throws UserDaoException{
-        userDao.create(entity);
+        userRepository.saveAndFlush(entity);
     }
 
     @Override
@@ -57,6 +58,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getEntityByName(String userName) throws UserDaoException {
-        return userDao.getEntityByName(userName);
+        return userRepository.findByName(userName).get(0);
     }
 }

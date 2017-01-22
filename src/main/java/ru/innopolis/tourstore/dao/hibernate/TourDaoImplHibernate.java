@@ -10,46 +10,38 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@Transactional
 public class TourDaoImplHibernate implements TourDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    @Transactional
-    public List<TourEntity> getAll() throws TourDaoException {
+    public List<TourEntity> getAll(){
         List tours = entityManager.createQuery("FROM TourEntity").getResultList();
-       // entityManager.close();
         return tours;
     }
 
     @Override
-    @Transactional
-    public TourEntity getEntityById(int id) throws TourDaoException {
+    public TourEntity getEntityById(int id) {
         TourEntity tour = entityManager.find(TourEntity.class, new Integer(id));
-     //  entityManager.close();
         return tour;
     }
 
     @Override
-    @Transactional
-    public void update(TourEntity entity) throws TourDaoException {
+    public void update(TourEntity entity)  {
         entityManager.merge(entity);
-      //  entityManager.close();
     }
 
     @Override
-    @Transactional
-    public void delete(int id) throws TourDaoException {
+    public void delete(int id){
         TourEntity tour = entityManager.find(TourEntity.class, new Integer(id));
         entityManager.remove(tour);
-     //   entityManager.close();
     }
 
     @Override
-    @Transactional
-    public void create(TourEntity entity) throws TourDaoException {
+    public void create(TourEntity entity) {
         entityManager.persist(entity);
-     //   entityManager.close();
+        entityManager.flush();
     }
 }

@@ -6,7 +6,7 @@
     <title>Добавление нового тура</title>
 </head>
 <body>
-<spring:form action="/store/create" method="POST" modelAttribute="tour">
+<spring:form action="/store/create" method="POST" modelAttribute="tourEntity">
     <table>
         <tr>
             <td align="right" >Название: </td>

@@ -53,7 +53,7 @@ public class TourController{
 
     @RequestMapping(path = "/store/create", method = RequestMethod.GET)
     public String getTourCreationPage(Model model){
-        model.addAttribute("tour", new TourEntity());
+        model.addAttribute("tourEntity", new TourEntity());
         return "CreateTour";
     }
 
@@ -84,11 +84,10 @@ public class TourController{
 
     @RequestMapping(path = "/store/edit", method = RequestMethod.GET)
     public String getEditTourPage(Model model,
-                                  @RequestParam("id") int tourIdToEdit)
-            throws TourDaoException {
+                                  @RequestParam("id") int tourIdToEdit) throws TourDaoException {
 
         TourEntity tour = tourService.getEntityById(tourIdToEdit);
-        model.addAttribute("tour", tour);
+        model.addAttribute("tourEntity", tour);
         return "EditTour";
     }
 

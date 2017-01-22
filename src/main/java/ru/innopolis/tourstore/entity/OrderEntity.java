@@ -1,5 +1,7 @@
 package ru.innopolis.tourstore.entity;
 
+import org.h2.engine.User;
+
 import javax.persistence.*;
 
 /**
@@ -14,11 +16,13 @@ public class OrderEntity {
     @Column(name = "ID", unique = true, nullable = false)
     private int id;
 
-    @Column(name = "USER_ID", nullable = false)
-    private int userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    private UserEntity userEntity;
 
-    @Column(name = "TOUR_ID", nullable = false)
-    private int tourId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="tour_id")
+    private TourEntity tourEntity;
 
     public int getId() {
         return id;
@@ -28,19 +32,35 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
-    public int getTourId() {
-        return tourId;
+    public TourEntity getTourEntity() {
+        return tourEntity;
     }
 
-    public void setTourId(int tourId) {
-        this.tourId = tourId;
+    public void setTourEntity(TourEntity tourEntity) {
+        this.tourEntity = tourEntity;
+    }
+
+    public void setUserId(int userId){
+        this.userEntity.setId(userId);
+    }
+
+    public int getUserId(){
+        return userEntity.getId();
+    }
+
+    public void setTourId(int tourId){
+        this.tourEntity.setId(tourId);
+    }
+
+    public int getTourId(){
+        return tourEntity.getId();
     }
 }

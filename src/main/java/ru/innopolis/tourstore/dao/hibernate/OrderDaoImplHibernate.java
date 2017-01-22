@@ -10,46 +10,38 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@Transactional
 public class OrderDaoImplHibernate implements OrderDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    @Transactional
-    public List<OrderEntity> getAll() throws OrderDaoException {
+    public List<OrderEntity> getAll(){
         List orders = entityManager.createQuery("FROM OrderEntity").getResultList();
-       // entityManager.close();
         return orders;
     }
 
     @Override
-    @Transactional
-    public OrderEntity getEntityById(int id) throws OrderDaoException {
+    public OrderEntity getEntityById(int id){
         OrderEntity order = entityManager.find(OrderEntity.class, new Integer(id));
-       // entityManager.close();
         return order;
     }
 
     @Override
-    @Transactional
-    public void update(OrderEntity entity) throws OrderDaoException {
+    public void update(OrderEntity entity) {
         entityManager.merge(entity);
-      //  entityManager.close();
     }
 
     @Override
-    @Transactional
-    public void delete(int id) throws OrderDaoException {
+    public void delete(int id){
         OrderEntity order = entityManager.find(OrderEntity.class, new Integer(id));
         entityManager.remove(order);
-    //    entityManager.close();
     }
 
     @Override
-    @Transactional
-    public void create(OrderEntity entity) throws OrderDaoException {
+    public void create(OrderEntity entity){
         entityManager.persist(entity);
-     //   entityManager.close();
+        entityManager.flush();
     }
 }

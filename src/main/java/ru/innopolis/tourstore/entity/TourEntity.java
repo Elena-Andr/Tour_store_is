@@ -3,7 +3,7 @@ package ru.innopolis.tourstore.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Object represents entity "Tour"
@@ -29,6 +29,9 @@ public class TourEntity {
     @NotNull(message="Cannot be Null")
     @Size(min=3, max=30, message = "Invalid input")
     private String description;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tourEntity")
+    private List<OrderEntity> orders;
 
     public boolean isDeleted() {return isDeleted;}
 

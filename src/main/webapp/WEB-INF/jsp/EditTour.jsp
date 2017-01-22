@@ -6,12 +6,12 @@
     <title>Title</title>
 </head>
 <body>
-<spring:form action="/store/edit" method="POST" modelAttribute="tour">
-    <input type="hidden" name="id" value="${tour.id}">
+<spring:form action="/store/edit" method="POST" modelAttribute="tourEntity">
+    <input type="hidden" name="id" value="${tourEntity.id}">
     <table>
         <tr>
             <td align="right" >Id: </td>
-            <td align="right" >${tour.id}</td>
+            <td align="right" >${tourEntity.id}</td>
         </tr>
         <tr>
             <td align="right" >Название: </td>

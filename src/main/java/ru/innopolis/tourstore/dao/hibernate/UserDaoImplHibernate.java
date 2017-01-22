@@ -11,66 +11,46 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Repository
+@Transactional
 public class UserDaoImplHibernate implements UserDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    @Transactional
-    public List<UserEntity> getAll() throws UserDaoException {
+    public List<UserEntity> getAll()  {
         List users = entityManager.createQuery("FROM UserEntity").getResultList();
-        //entityManager.close();
         return users;
     }
 
     @Override
-    @Transactional
-    public UserEntity getEntityById(int id) throws UserDaoException {
+    public UserEntity getEntityById(int id)  {
         UserEntity user = entityManager.find(UserEntity.class, new Integer(id));
-        //entityManager.close();
         return user;
     }
 
     @Override
-    @Transactional
-    public UserEntity getEntityByName(String name) throws UserDaoException {
-//        UserEntity user = (UserEntity) entityManager
-//                .createQuery("FROM UserEntity")
-//                .setParameter("name", name)
-//                .getSingleResult();
-
-//        TypedQuery<UserEntity> tq = entityManager.createQuery("from UserEntity WHERE name=?", UserEntity.class);
-//        UserEntity result = tq.setParameter(1, name).getSingleResult();
-
+    public UserEntity getEntityByName(String name)  {
         String queryString = "SELECT * FROM USERS WHERE NAME=?";
         Query query = entityManager.createNativeQuery(queryString, UserEntity.class);
         List<UserEntity> result = query.setParameter(1, name).getResultList();
-
-       // entityManager.close();
-
         return result.get(0);
     }
 
     @Override
-    @Transactional
-    public void update(UserEntity entity) throws UserDaoException {
+    public void update(UserEntity entity) {
         entityManager.merge(entity);
-       // entityManager.close();
     }
 
     @Override
-    @Transactional
-    public void delete(int id) throws UserDaoException {
+    public void delete(int id) {
         UserEntity user = entityManager.find(UserEntity.class, new Integer(id));
         entityManager.remove(user);
-     //   entityManager.close();
     }
 
     @Override
-    @Transactional
-    public void create(UserEntity entity) throws UserDaoException {
+    public void create(UserEntity entity) {
         entityManager.persist(entity);
-     //   entityManager.close();
+        entityManager.flush();
     }
 }

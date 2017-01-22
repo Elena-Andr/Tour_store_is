@@ -3,6 +3,7 @@ package ru.innopolis.tourstore.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Object represents entity "User"
@@ -16,21 +17,22 @@ public class UserEntity {
     @Column(name = "ID", unique = true, nullable = false)
     private int id;
 
-    @Column(name = "NAME", unique = true, nullable = false)
+    @Column(name = "NAME")
     @NotNull(message = "Name cannot be empty")
-    @Size(min = 3, max = 10, message = "Invalid input")
     private String name;
 
     @Column(name = "PASSWORD")
     @NotNull(message = "Password cannot be empty")
-    @Size(min = 3, max = 10, message = "Invalid input")
     private String password;
+
+    @Column(name = "ENABLED")
+    private Boolean enabled;
 
     @Column(name = "ROLE")
     private String role;
 
-    @Column(name = "ENABLED")
-    private Boolean enabled;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userEntity")
+    private List<OrderEntity> orders;
 
     public int getId() {
         return id;
@@ -70,5 +72,13 @@ public class UserEntity {
 
     public void setEnabled(Boolean value){
         this.enabled = value;
+    }
+
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
 }
